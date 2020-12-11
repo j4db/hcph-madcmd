@@ -1,0 +1,87 @@
+cmd delete tsys
+cmd create tsys Teleport Service Systems for SMP v1.3  §b§lBy: j4dthedevil
+cmd add tsys onerror goto 100
+cmd add tsys #world checker
+cmd add tsys if %level% = \"desert\" then goto 7
+cmd add tsys message %p% §eHyper§6Craft §8» §7You need to be on Survival SMP World to use this command!
+cmd add tsys exit
+cmd add tsys #cooldownmecha
+cmd add tsys load %pahingadaw0%
+cmd add tsys if varset(%pahingadaw0%[%p%]) = %false% then goto 15
+cmd add tsys let %pahinga0% = %pahingadaw0%[%p%]
+cmd add tsys let %siesta0% = %time% - %pahinga0%
+cmd add tsys if %siesta0% >= 12 then goto 15
+cmd add tsys cancel
+cmd add tsys message %p% §8»§r§7 Pls wait a bit before using this. Batteries are recharging...
+cmd add tsys exit
+cmd add tsys let %pahingadaw0%[%p%] = %time%
+cmd add tsys #initial form
+cmd add tsys save %pahingadaw0%
+cmd add tsys %listahan% = onlineplayers()
+cmd add tsys let %pasimuno% = %p%
+cmd add tsys save %pasimuno%
+cmd add tsys %TPform%[\"type\"] = \"custom_form\"
+cmd add tsys %TPform%[\"title\"] = \"§l§0»§r§dTELEPORT SERVICE §5SYSTEMS§l§0«\"
+cmd add tsys %TPNotice%[\"type\"] = \"label\"
+cmd add tsys %TPNotice%[\"text\"] = \"Welcome to HyperCraft Teleport Service Systems.- please report in discord if its bugged. HCPH > Community > Survival\"
+cmd add tsys %pilian1%[\"type\"] = \"dropdown\"
+cmd add tsys %pilian1%[\"text\"] = \"Find name here.\"
+cmd add tsys %pilian1%[\"options\"] = %listahan%
+cmd add tsys %pilian2%[\"type\"] = \"step_slider\"
+cmd add tsys %pilian2%[\"text\"] = \"Choose action. \"
+cmd add tsys %pilian2%[\"steps\"] = array(\"No Action\", \"TP to you\", \"TP to player\")
+cmd add tsys %nilalaman%[] = %TPNotice%
+cmd add tsys %nilalaman%[] = %pilian1%
+cmd add tsys %nilalaman%[] = %pilian2%
+cmd add tsys %TPform%[\"content\"] = %nilalaman%
+cmd add tsys %tugon1% = dialog(%pasimuno%, %TPform%)
+cmd add tsys if varset(%tugon1%) = %false% then message %pasimuno% \"Nothing to do here.\"
+cmd add tsys if varset(%tugon1%) = %false% then exit
+cmd add tsys #inital form results and checker
+cmd add tsys %pagbilang0% = %tugon1%[1]
+cmd add tsys %napili0% = %listahan%[%pagbilang0%]
+cmd add tsys save %napili0%
+cmd add tsys %napili1% = %tugon1%[2]
+cmd add tsys save %napili1%
+cmd add tsys %gagawin0% = %pilian2%[%napili1%]
+cmd add tsys save %gagawin0%
+cmd add tsys %detalye0% = playerstatus(%napili0%)
+cmd add tsys %nasaan0% = %detalye0%[\"level\"]
+cmd add tsys if %nasaan0% notin \"desert\" then message %pasimuno% %napili0%  is currently on another dimension outside Survival. Please try again later.
+cmd add tsys if %nasaan0% notin "\desert\" then exit
+cmd add tsys if varset(%nilalaman%) = %false% then message %pasimuno% \"Nothing to do here.\"
+cmd add tsys if varset(%nilalaman%) = %false% then exit
+cmd add tsys if %napili0% = %pasimuno% then message %pasimuno% \"Doing this to yourself traps you in a paradox. Nope! Not possible.\"
+cmd add tsys if %napili0% = %pasimuno% then exit
+cmd add tsys if %napili0% notin %listahan% then message %pasimuno% \" %napili0% seems to be missing suddenly.\"
+cmd add tsys if %napili0% notin %listahan% then exit%
+cmd add tsys if %napili1% = 0 then message %pasimuno% \"Nothing to do here.\"
+cmd add tsys if %napili1% = 0 then exit
+cmd add tsys if varset(%napili0%) then message %pasimuno% \"TP request submitted. A response will be advised soon. Thank you for using our services. Ciao!\"
+cmd add tsys #consent form
+cmd add tsys load %pasimuno%
+cmd add tsys load %napili0%
+cmd add tsys load %napili1%
+cmd add tsys load %gagawin0%
+cmd add tsys %TPConsent%[\"type\"] = \"form\"
+cmd add tsys %TPConsent%[\"title\"] = \"§l§0»§r§dTELEPORT SERVICE §5SYSTEMS§l§0«\"
+cmd add tsys %TPConsent%[\"content\"] = \"Would you accept \" + %pasimuno% + \" 's request to \" + %gagawin0% + \" ? \"
+cmd add tsys %yeet0%[\"text\"] = \"Accept\"
+cmd add tsys %yeet1%[\"text\"] = \"Decline\"
+cmd add tsys %anonanga0%[] = %yeet0%
+cmd add tsys %anonanga0%[] = %yeet1%
+cmd add tsys %TPConsent%[\"buttons\"] = %anonanga0%
+cmd add tsys %tugon2% = dialog(%napili0%, %TPConsent%)
+cmd add tsys #actions
+cmd add tsys if %tugon2% = 0 then goto 78
+cmd add tsys if %tugon2% = 1 then message %pasimuno% %napili0%  declined or ignored your TP request.
+cmd add tsys if %tugon2% = 1 then message %napili0% \" Response sent. \"
+cmd add tsys if %tugon2% = 1 then exit
+cmd add tsys ascon if %napili1% = 1 then /tp %napili0% %pasimuno%
+cmd add tsys ascon if %napili1% = 2 then /tp %pasimuno% %napili0%
+cmd add tsys message %pasimuno% \" TP request completed. Thank you for using our services. Bye! \"
+cmd add tsys message %napili0% \" TP request completed. Thank you for using our services. Bye! \"
+cmd add tsys exit
+cmd insert tsys 100 message %p% \"Nothing to do here. *Flies away* \"
+cmd insert tsys 101 exit
+cmd disable tsys
